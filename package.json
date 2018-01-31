@@ -1,0 +1,23 @@
+{
+  "name": "ethereum-credit-channels",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "buffer": "^5.0.8",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-scripts": "1.1.0",
+    "web3": "^1.0.0-beta.29"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "truffle:compile": "cd src/truffle; truffle compile",
+    "truffle:deploy": "cd src/truffle; truffle deploy"
+  },
+  "devDependencies": {
+    "truffle": "^4.0.5"
+  }
+}

@@ -1,0 +1,54 @@
+html, body, #root, .app {
+  height: 100%;
+}
+
+body {
+  color: #222;
+}
+
+label {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+button {
+  margin: 0 10px;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+}
+
+.contract-section {
+  flex-shrink: 0;
+  margin: 10px 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid #CCC;
+}
+
+.consumer-provider-container {
+  flex-grow: 1;
+  display: flex;
+  margin: 10px 20px;
+}
+
+.provider {
+  flex-grow: 1;
+  margin-right: 20px;
+  border-right: 1px solid #CCC;
+}
+
+.consumer {
+  flex-grow: 1;
+}
+
+.eth-address, .amount {
+  font-size: 0.9em;
+  color: #444;
+}
