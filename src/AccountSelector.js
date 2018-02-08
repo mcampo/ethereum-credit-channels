@@ -12,9 +12,17 @@ export default class AccountSelector extends Component {
     const { accounts, selectedAccount } = this.props
     const selectedAddress = selectedAccount ? selectedAccount.address : ''
     return (
-      <select value={selectedAddress} onChange={this.onChange}>
-        {(accounts || []).map(account => <option value={account.address} key={account.address}>{account.address}</option>)}
-      </select>
+      <div>
+        <label>Address</label>
+        <select value={selectedAddress} onChange={this.onChange}>
+        {accounts.map(account => <option value={account.address} key={account.address}>{account.address}</option>)}
+        </select>
+        <br />
+
+        <label>Balance</label>
+        <span className="amount">{selectedAccount && selectedAccount.balance} ETH</span>
+        <br />
+      </div>
     )
   }
 }

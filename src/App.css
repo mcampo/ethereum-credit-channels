@@ -17,7 +17,13 @@ h2 {
 }
 
 button {
+  padding: 5px 10px;
   margin: 0 10px;
+}
+
+select {
+  padding: 5px;
+  margin-bottom: 10px;
 }
 
 .app {
@@ -50,5 +56,9 @@ button {
 
 .eth-address, .amount {
   font-size: 0.9em;
-  color: #444;
+  color: #333;
+}
+
+.amount {
+  font-size: 0.9em;
 }
