@@ -39,13 +39,19 @@ class App extends Component {
         const credits = await contract.methods.getCredits().call({ from: account.address })
         account.credits = credits
       }
+    } else {
+      account.hasChannelOpen = false
     }
     return account
   }
 
   onProviderAccountChange = async ({ selectedAccount }) => {
     await this.refreshAccount(selectedAccount)
-    this.setState({ providerAccount: selectedAccount })
+    this.setState({ providerAccount: selectedAccount }, async () => {
+      const { consumerAccount } = this.state
+      await this.refreshAccount(consumerAccount)
+      this.setState({ consumerAccount })
+    })
   }
 
   onConsumerAccountChange = async ({ selectedAccount }) => {
