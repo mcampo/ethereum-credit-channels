@@ -10,8 +10,7 @@ class App extends Component {
     this.state = {
       accounts: [],
       providerAccount: null,
-      consumerAccount: null,
-      contract: null
+      consumerAccount: null
     }
   }
 
@@ -26,11 +25,12 @@ class App extends Component {
   }
 
   refreshAccount = async (account) => {
-    const { contract } = this.state
+    const { providerAccount } = this.state
     const web3 = await getWeb3()
     const balance = web3.utils.fromWei(await web3.eth.getBalance(account.address))
     account.balance = balance
 
+    const contract = providerAccount && providerAccount.contract
     if (contract) {
       const hasChannelOpen = await contract.methods.hasChannelOpen().call({ from: account.address })
       account.hasChannelOpen = hasChannelOpen
@@ -65,32 +65,33 @@ class App extends Component {
       gas: 1500000,
       gasPrice: 1
     })
-    const updatedAccount = await this.refreshAccount({ ...providerAccount })
+    await this.refreshAccount(providerAccount)
     deployedContract.setProvider(contract.currentProvider)
-    this.setState({ contract: deployedContract, providerAccount: updatedAccount })
+    providerAccount.contract = deployedContract
+    this.setState({ providerAccount })
   }
 
   onConsumerCreditsRefresh = async () => {
-    const { consumerAccount, contract } = this.state
+    const { consumerAccount, providerAccount: { contract } } = this.state
     const credits = await contract.methods.getCredits().call({ from: consumerAccount.address })
-    const updatedAccount = await this.refreshAccount({ ...consumerAccount })
-    this.setState({ consumerAccount: updatedAccount })
+    consumerAccount.credits = credits
+    this.setState({ consumerAccount })
   }
 
   onOpenChannel = async () => {
-    const { consumerAccount, contract } = this.state
-    const openChannelResult = await contract.methods.openChannel().send({ from: consumerAccount.address, value: 100000000000000000, gas: 500000 })
-    const updatedAccount = await this.refreshAccount({ ...consumerAccount })
-    this.setState({ consumerAccount: updatedAccount })
+    const { consumerAccount, providerAccount: { contract } } = this.state
+    await contract.methods.openChannel().send({ from: consumerAccount.address, value: 100000000000000000, gas: 500000 })
+    await this.refreshAccount(consumerAccount)
+    this.setState({ consumerAccount })
   }
 
   render() {
     const {
       accounts,
       providerAccount,
-      consumerAccount,
-      contract
+      consumerAccount
     } = this.state
+    const contract = providerAccount && providerAccount.contract
     const consumerHasChannelOpen = consumerAccount && consumerAccount.hasChannelOpen
 
     return (
@@ -122,7 +123,11 @@ class App extends Component {
 
             <h3>Credit channel</h3>
             {
-              !consumerHasChannelOpen &&
+              !contract &&
+              <span>There is no deployed contracy by current provider</span>
+            }
+            {
+              !!contract && !consumerHasChannelOpen &&
               <div>
                 <span>Consumer does not have an open channel</span>
                 <button type="button" onClick={this.onOpenChannel}>Open channel</button>
