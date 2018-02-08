@@ -42,7 +42,13 @@ class App extends Component {
     } else {
       account.hasChannelOpen = false
     }
-    return account
+  }
+
+  refreshContract = async () => {
+    const { providerAccount: { contract } } = this.state
+    const web3 = await getWeb3()
+    const balance = web3.utils.fromWei(await web3.eth.getBalance(contract.options.address))
+    contract.balance = balance
   }
 
   onProviderAccountChange = async ({ selectedAccount }) => {
@@ -73,6 +79,7 @@ class App extends Component {
     })
     await this.refreshAccount(providerAccount)
     deployedContract.setProvider(contract.currentProvider)
+    deployedContract.balance = 0
     providerAccount.contract = deployedContract
     this.setState({ providerAccount })
   }
@@ -88,6 +95,7 @@ class App extends Component {
     const { consumerAccount, providerAccount: { contract } } = this.state
     await contract.methods.openChannel().send({ from: consumerAccount.address, value: 100000000000000000, gas: 500000 })
     await this.refreshAccount(consumerAccount)
+    await this.refreshContract()
     this.setState({ consumerAccount })
   }
 
@@ -117,7 +125,13 @@ class App extends Component {
             }
             { !!contract &&
               <div>
-                <span>Contract deployed at</span> <span className="eth-address">{contract.options.address}</span>
+                <label>Contract deployed at</label>
+                <span className="eth-address">{contract.options.address}</span>
+                <br />
+
+                <label>Balance</label>
+                <span className="amount">{contract.balance} ETH</span>
+                <br />
               </div>
             }
 
