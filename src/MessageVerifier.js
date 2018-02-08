@@ -6,9 +6,9 @@ export default class MessageVerifier extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      channelId: '0x503416be4210f9988c314deeb16994958d752be280c533c21ff7f040ecff9dc8',
-      credits: '1',
-      signature: '0x3671d5e58fd650bc55ea7d3d25cafcdbfdde203d1f5cbe815bcaec2318d67a5102896b031929fda714e7e66ddf652e57149d9ef019832a33c5e8fe502fdf55f200'
+      channelId: '',
+      credits: '',
+      signature: ''
     }
   }
 
