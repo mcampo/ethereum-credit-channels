@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import getWeb3 from './utils/getWeb3'
 import creditChannels from './truffle/build/contracts/CreditChannels.json'
 import AccountSelector from './AccountSelector'
+import MessageSigner from './MessageSigner'
+import MessageVerifier from './MessageVerifier'
 import './App.css'
 
 class App extends Component {
@@ -123,7 +125,7 @@ class App extends Component {
                 <button type="button" onClick={this.onDeployContract}>Deploy contract</button>
               </div>
             }
-            { !!contract &&
+            { contract &&
               <div>
                 <label>Contract deployed at</label>
                 <span className="eth-address">{contract.options.address}</span>
@@ -132,8 +134,12 @@ class App extends Component {
                 <label>Balance</label>
                 <span className="amount">{contract.balance} ETH</span>
                 <br />
+
+                <MessageVerifier account={providerAccount} contract={contract} />
               </div>
             }
+
+
 
           </div>
           <div className="consumer">
@@ -159,8 +165,16 @@ class App extends Component {
                 <label>Credits</label>
                 <span className="amount">{consumerAccount.credits}</span>
                 <button type="button" onClick={this.onConsumerCreditsRefresh}>refresh</button>
+                <br />
+
+                <MessageSigner account={consumerAccount} />
               </div>
             }
+
+            {
+              // consumerAccount && <MessageSigner account={consumerAccount} />
+            }
+
           </div>
         </div>
       </div>

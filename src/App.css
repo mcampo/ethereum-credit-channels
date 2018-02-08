@@ -8,12 +8,17 @@ body {
 
 label {
   margin-right: 10px;
+  margin-top: 10px;
   margin-bottom: 10px;
   display: inline-block;
 }
 
 h2 {
   margin-top: 0;
+}
+
+h4 {
+  margin-bottom: 10px;
 }
 
 button {
@@ -46,19 +51,29 @@ select {
 
 .provider {
   flex-grow: 1;
+  width: 50%;
   margin-right: 20px;
+  padding-right: 20px;
   border-right: 1px solid #CCC;
 }
 
 .consumer {
   flex-grow: 1;
+  width: 50%;
+  word-break: break-all;
 }
 
-.eth-address, .amount {
+.eth-address, .amount, .value {
   font-size: 0.9em;
   color: #333;
 }
 
-.amount {
-  font-size: 0.9em;
+.message-signer .credits, .message-verifier .credits {
+  padding: 2px 5px;
+  width: 4em;
+}
+
+.message-verifier button {
+  margin-top: 10px;
+  margin-left: 0;
 }

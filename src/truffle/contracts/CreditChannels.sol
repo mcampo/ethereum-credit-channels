@@ -24,8 +24,6 @@ contract CreditChannels {
     );
 
     channels[channelId] = channel;
-
-    return channelId;
   }
 
   function hasChannelOpen() external view returns (bool) {
@@ -44,13 +42,7 @@ contract CreditChannels {
     return 0;
   }
 
-  function verifyPromise(uint clientId, bytes32[3] h, uint8 v, uint credits) external view returns (bool) {
-    // h[0]    Hash of (id, credits)
-    // h[1]    r of signature
-    // h[2]    s of signature
-
-    bytes32 channelId = keccak256(clientId);
-
+  function verifyMessage(bytes32 channelId, uint credits, uint8 v, bytes32 r, bytes32 s) external view returns (bool) {
     Channel memory channel;
     channel = channels[channelId];
 
@@ -60,14 +52,11 @@ contract CreditChannels {
     }
 
     // verift the consumer has signed the promise
-    address signer = ecrecover(h[0], v, h[1], h[2]);
+    bytes32 messageHash = keccak256(channelId, credits);
+    bytes memory prefix = "\x19Ethereum Signed Message:\n32";
+    messageHash = keccak256(prefix, messageHash);
+    address signer = ecrecover(messageHash, v, r, s);
     if (signer != channel.consumer) {
-      return false;
-    }
-
-    // verify the hash provided is of the channel id and the amount sent
-    bytes32 proof = keccak256(channelId, credits);
-    if (proof != h[0]) {
       return false;
     }
 

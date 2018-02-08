@@ -25,6 +25,7 @@ const getWeb3 = () => new Promise((resolve, reject) => {
     }
 
     instance = web3
+    window.web3Instance = instance
     resolve(web3);
   })
 });
